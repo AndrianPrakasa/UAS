@@ -3,6 +3,7 @@ import pandas as pd
 import tensorflow as tf
 import streamlit as st
 
+st.markdown("# MLP")
 # Load the dataset
 dataset_path = "https://raw.githubusercontent.com/AndrianPrakasa/UAS/main/CSV/csa.csv"
 data = pd.read_csv(dataset_path)
