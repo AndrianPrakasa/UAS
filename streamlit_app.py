@@ -4,7 +4,7 @@ import tensorflow as tf
 import streamlit as st
 
 # Load the dataset
-dataset_path = "path/to/dataset.csv"
+dataset_path = "https://raw.githubusercontent.com/AndrianPrakasa/UAS/main/CSV/csa.csv"
 data = pd.read_csv(dataset_path)
 data.replace("Agree", 1, inplace=True)
 data.replace("Yes", 1, inplace=True)
