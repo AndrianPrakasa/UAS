@@ -88,7 +88,7 @@ st.markdown("# Tree")
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import pygraphviz as pgv
+import graphviz
 from sklearn.preprocessing import LabelEncoder
 from sklearn import tree
 from sklearn.tree import DecisionTreeClassifier
@@ -96,47 +96,42 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 import streamlit as st
 
-# Load the dataset
+# Load the data
 dataset = "https://raw.githubusercontent.com/AndrianPrakasa/UAS/main/CSV/csa.csv"
 df = pd.read_csv(dataset)
-df.replace("Agree", 1, inplace=True)
-df.replace("Yes", 1, inplace=True)
-df.replace("No", 0, inplace=True)
-df.replace("Disagree", 0, inplace=True)
+df.replace(["Agree", "Yes"], 1, inplace=True)
+df.replace(["No", "Disagree"], 0, inplace=True)
 
-# Display the dataset in Streamlit
-st.dataframe(df.head())
+# Split the data into features (X) and target variable (y)
+X = df.iloc[:, :5].values
+y = df['Knowledge Level'].values
 
-df_copy = df.copy()
-df_copy.isnull().sum()
-
-df_copy.info()
-
-X = df_copy.iloc[:, :5].values
-y = df_copy['Knowledge Level'].values
-
+# Split the data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# Create a decision tree classifier with a maximum depth of 3 and Gini impurity criterion
+# Create the decision tree classifier with maximum depth of 3 and Gini impurity as the splitting criterion
 clf_gini = DecisionTreeClassifier(criterion="gini", max_depth=3, random_state=0)
 
 # Fit the model
 clf_gini.fit(X_train, y_train)
 
-# Export the decision tree to a Graphviz object
-dot_data = tree.export_graphviz(clf_gini, out_file=None, filled=True, rounded=True, special_characters=True)
-graph = pgv.AGraph(string=dot_data)
-
-# Display the decision tree in Streamlit
-st.graphviz_chart(graph.draw(format='png'))
-
 # Calculate accuracy on the training set
 y_pred_train_gini = clf_gini.predict(X_train)
-st.write("Accuracy on training set (Gini): {:.3f}".format(accuracy_score(y_train, y_pred_train_gini)))
+train_accuracy = accuracy_score(y_train, y_pred_train_gini)
 
 # Calculate accuracy on the testing set
 y_pred_gini = clf_gini.predict(X_test)
-st.write("Accuracy on testing set (Gini): {:.3f}".format(accuracy_score(y_test, y_pred_gini)))
+test_accuracy = accuracy_score(y_test, y_pred_gini)
+
+# Display the accuracy scores
+st.write("Accuracy on training set (Gini): {:.3f}".format(train_accuracy))
+st.write("Accuracy on testing set (Gini): {:.3f}".format(test_accuracy))
+
+# Display the decision tree visualization
+fig = plt.figure(figsize=(12, 8))
+tree.plot_tree(clf_gini.fit(X_train, y_train))
+st.pyplot(fig)
+
 
 
 
