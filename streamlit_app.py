@@ -88,7 +88,7 @@ st.markdown("# Tree")
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import graphviz as graphviz
+import pygraphviz as graphviz
 from sklearn.preprocessing import LabelEncoder
 from sklearn import tree
 from sklearn.tree import DecisionTreeClassifier
