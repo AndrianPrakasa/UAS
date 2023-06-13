@@ -30,4 +30,9 @@ ann.add(tf.keras.layers.Dense(units=1, activation='sigmoid'))
 
 # Compile and train the model
 ann.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+history = ann.fit(x_train, y_train, batch_size=32, epochs=100, verbose=0)
 ann.fit(x_train, y_train, batch_size=32, epochs=100)
+loss, accuracy = ann.evaluate(x_test, y_test)
+
+st.write(f"Test Loss: {loss:.4f}")
+st.write(f"Test Accuracy: {accuracy:.4f}")
